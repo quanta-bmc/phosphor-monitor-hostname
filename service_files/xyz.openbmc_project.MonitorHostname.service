@@ -1,0 +1,11 @@
+[Unit]
+Description=Monitor Hostname Service
+
+
+[Service]
+ExecStart=/usr/bin/monitor-hostname-service
+Restart=always
+Type=simple
+
+[Install]
+WantedBy=multi-user.target
