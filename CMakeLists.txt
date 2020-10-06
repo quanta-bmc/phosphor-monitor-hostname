@@ -14,7 +14,7 @@ find_package (OpenSSL REQUIRED)
 include_directories (${OPENSSL_INCLUDE_DIR})
 include_directories(src/)
 
-set(SRC_FILES src/monitor_hostname.cpp)
+set(SRC_FILES src/monitor_hostname.cpp src/certificate_handler.cpp)
 
 add_executable(${PROJECT_NAME} ${SRC_FILES})
 target_link_libraries(${PROJECT_NAME} -lstdc++fs)
@@ -26,7 +26,6 @@ target_link_libraries(${PROJECT_NAME} ${OPENSSL_LIBRARIES})
 install(TARGETS ${PROJECT_NAME} DESTINATION ${CMAKE_INSTALL_BINDIR})
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-rtti")
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fno-rtti")
 
 set(
   SERVICE_FILES
