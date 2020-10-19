@@ -7,8 +7,8 @@ namespace certificate
         std::cerr << "Generating x509 Certificate: " << hostname << std::endl;
         initOpenssl();
 
-        EVP_PKEY* pPrivKey = createEcKey();
-        if (pPrivKey != nullptr)
+        EVP_PKEY* pKey = createEcKey();
+        if (pKey != nullptr)
         {
             // Use this code to directly generate a certificate
             X509* x509 = X509_new();
@@ -32,7 +32,7 @@ namespace certificate
                 X509_gmtime_adj(X509_get_notAfter(x509), 60L * 60L * 24L * 365L * 10L);
 
                 // set the public key to the key we just generated
-                X509_set_pubkey(x509, pPrivKey);
+                X509_set_pubkey(x509, pKey);
 
                 // get the subject name
                 X509_NAME* name;
@@ -67,12 +67,12 @@ namespace certificate
                 add_ext(x509, NID_netscape_cert_type, "server, sslCA, emailCA, objCA");
 
                 // Sign the certificate with our private key
-                X509_sign(x509, pPrivKey, EVP_sha256());
+                X509_sign(x509, pKey, EVP_sha256());
 
                 FILE* pFile = fopen(tmpCertPath, "wt");
                 if (pFile != nullptr)
                 {
-                    PEM_write_PrivateKey(pFile, pPrivKey, nullptr, nullptr, 0, nullptr, nullptr);
+                    PEM_write_PrivateKey(pFile, pKey, nullptr, nullptr, 0, nullptr, nullptr);
 
                     PEM_write_X509(pFile, x509);
                     fclose(pFile);
@@ -81,8 +81,8 @@ namespace certificate
                 X509_free(x509);
             }
 
-            EVP_PKEY_free(pPrivKey);
-            pPrivKey = nullptr;
+            EVP_PKEY_free(pKey);
+            pKey = nullptr;
         }
     }
 
